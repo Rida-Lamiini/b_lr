@@ -1,0 +1,189 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relations
+  sessions       Session[]
+  containers     Container[]
+  tasks          Task[]
+  notes          Note[]
+  files          File[]
+  calendarEvents CalendarEvent[]
+  timeblocks     Timeblock[]
+  dailyLogs      DailyLog[]
+  journalEntries JournalEntry[]
+  weeklyReviews  WeeklyReview[]
+  focusSessions  FocusSession[]
+  habitLogs      HabitLog[]
+  tipHistories   TipHistory[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Container {
+  id          String    @id @default(cuid())
+  name        String
+  type        String    // PROJECT, AREA, RESOURCE, ARCHIVE
+  description String?
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // relations
+  tasks Task[]
+  notes Note[]
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  completed   Boolean   @default(false)
+  priority    Int?
+  dueDate     DateTime?
+  userId      String
+  containerId String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  container   Container? @relation(fields: [containerId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // relations
+  files File[]
+}
+
+model Note {
+  id          String    @id @default(cuid())
+  title       String
+  content     String
+  userId      String
+  containerId String?
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  container   Container? @relation(fields: [containerId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // relations
+  files File[]
+}
+
+model File {
+  id     String  @id @default(cuid())
+  name   String
+  path   String
+  type   String
+  size   Int
+  userId String
+  taskId String?
+  noteId String?
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  note   Note?   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model CalendarEvent {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  start       DateTime
+  end         DateTime
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Timeblock {
+  id        String   @id @default(cuid())
+  title     String
+  start     DateTime
+  end       DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DailyLog {
+  id        String   @id @default(cuid())
+  date      DateTime @unique
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JournalEntry {
+  id        String   @id @default(cuid())
+  date      DateTime
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WeeklyReview {
+  id        String   @id @default(cuid())
+  weekStart DateTime
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FocusSession {
+  id        String   @id @default(cuid())
+  start     DateTime
+  end       DateTime?
+  duration  Int?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  habit     String
+  date      DateTime
+  completed Boolean  @default(false)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TipHistory {
+  id      String   @id @default(cuid())
+  tip     String
+  shownAt DateTime @default(now())
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
