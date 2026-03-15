@@ -1,54 +1,92 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { CommandTrigger } from "@/components/command-palette/CommandTrigger";
+import { Kbd } from "@/components/ui/kbd-hint";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+
+/**
+ * Derives a human-readable breadcrumb from the current pathname.
+ * e.g. /journey/daily → ["journey", "daily log"]
+ */
+function useBreadcrumb() {
+  const pathname = usePathname();
+  const segments = pathname.split("/").filter(Boolean);
+
+  const labels: Record<string, string> = {
+    projects:   "projects",
+    areas:      "areas",
+    resources:  "resources",
+    archives:   "archives",
+    tasks:      "tasks",
+    notes:      "notes",
+    files:      "files",
+    calendar:   "calendar",
+    journey:    "journey",
+    daily:      "daily log",
+    journal:    "journal",
+    milestones: "milestones",
+    review:     "weekly review",
+    focus:      "focus",
+  };
+
+  return segments.map((s) => labels[s] ?? s);
+}
 
 interface HeaderProps {
-  onMenuClick: () => void;
+  onMenuClick?: () => void;
 }
 
 /**
- * Header component with navigation and date
+ * Top header bar with breadcrumb navigation,
+ * command palette trigger, and current date.
  */
 export function Header({ onMenuClick }: HeaderProps) {
-  const pathname = usePathname();
-
-  // Derive page title from pathname
-  const getPageTitle = (path: string): string => {
-    if (path === "/") return "Dashboard";
-    const segments = path.split("/").filter(Boolean);
-    if (segments.length === 0) return "Dashboard";
-    const lastSegment = segments[segments.length - 1];
-    return lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
-  };
-
-  const pageTitle = getPageTitle(pathname);
-
-  // Current date formatted
-  const currentDate = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const breadcrumb = useBreadcrumb();
+  const today = format(new Date(), "EEE, MMM d");
 
   return (
-    <header className="bg-background border-b border-border px-4 py-3 md:px-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <button
-            onClick={onMenuClick}
-            className="md:hidden p-2 rounded-md hover:bg-accent transition-colors mr-3"
-            aria-label="Toggle menu"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
-          <h1 className="text-xl font-semibold text-foreground">{pageTitle}</h1>
-        </div>
-        <div className="text-sm text-muted-foreground">
-          {currentDate}
-        </div>
+    <header className={cn(
+      "flex items-center gap-3 px-5 h-10 flex-shrink-0",
+      "bg-bg-1 border-b border-border-subtle"
+    )}>
+
+      {/* Mobile menu button */}
+      <button
+        onClick={onMenuClick}
+        className="lg:hidden text-text-3 hover:text-text-2 font-mono text-sm"
+        title="Toggle menu"
+      >
+        ☰
+      </button>
+
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-1.5 font-mono text-xs text-text-3">
+        <span className="text-text-3">brain</span>
+        {breadcrumb.map((segment, i) => (
+          <span key={i} className="flex items-center gap-1.5">
+            <span className="text-text-3">/</span>
+            <span className={i === breadcrumb.length - 1 ? "text-text-1" : "text-text-3"}>
+              {segment}
+            </span>
+          </span>
+        ))}
       </div>
+
+      {/* Command trigger — centered */}
+      <div className="flex-1 flex justify-center">
+        <CommandTrigger className="w-64" />
+      </div>
+
+      {/* Right: date */}
+      <div className="flex items-center gap-3">
+        <span className="font-mono text-2xs text-text-3 hidden sm:block">
+          {today}
+        </span>
+        <Kbd keys={["⌘K"]} />
+      </div>
+
     </header>
   );
 }

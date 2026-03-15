@@ -1,141 +1,80 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import {
-  LayoutDashboard,
-  FolderKanban,
-  Layers,
-  BookOpen,
-  Archive,
-  CheckSquare,
-  FileText,
-  Paperclip,
-  CalendarDays,
-  Sun,
-  BookHeart,
-  Trophy,
-  BarChart2,
-  LogOut,
-} from "lucide-react";
+import { SidebarItem } from "./SidebarItem";
+import { SidebarSection } from "./SidebarSection";
+import * as Icons from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
 
 interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-const sections = [
-  {
-    title: "ORGANIZE",
-    links: [
-      { href: "/", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/projects", label: "Projects", icon: FolderKanban },
-      { href: "/areas", label: "Areas", icon: Layers },
-      { href: "/resources", label: "Resources", icon: BookOpen },
-      { href: "/archives", label: "Archives", icon: Archive },
-    ],
-  },
-  {
-    title: "WORK",
-    links: [
-      { href: "/tasks", label: "Tasks", icon: CheckSquare },
-      { href: "/notes", label: "Notes", icon: FileText },
-      { href: "/files", label: "Files", icon: Paperclip },
-      { href: "/calendar", label: "Calendar", icon: CalendarDays },
-    ],
-  },
-  {
-    title: "JOURNEY",
-    links: [
-      { href: "/journey/daily", label: "Daily Log", icon: Sun },
-      { href: "/journey/journal", label: "Journal", icon: BookHeart },
-      { href: "/journey/milestones", label: "Milestones", icon: Trophy },
-      { href: "/journey/review", label: "Weekly Review", icon: BarChart2 },
-    ],
-  },
-];
-
-/**
- * Sidebar component for navigation
- */
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const { data: session } = useSession();
-
-  const handleLogout = async () => {
-    await signOut();
-    router.push("/login");
-  };
-
   return (
-    <motion.div
-      className={`w-60 bg-sidebar border-r border-sidebar-border ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      } fixed inset-y-0 left-0 z-50 md:static md:translate-x-0`}
-      initial={false}
-      animate={{ x: isOpen ? 0 : -240 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-    >
-      <div className="flex flex-col h-full">
-        {/* Header */}
-        <div className="flex items-center px-6 py-4 border-b border-sidebar-border">
-          <span className="text-2xl mr-2">🧠</span>
-          <h1 className="text-xl font-bold text-sidebar-foreground">Brain</h1>
+    <aside className={cn(
+      "fixed inset-y-0 left-0 z-50 flex flex-col w-64 min-w-[256px] h-screen bg-card/50 backdrop-blur-xl border-r border-border overflow-hidden transition-transform duration-300 lg:relative lg:translate-x-0",
+      !isOpen && "-translate-x-full"
+    )}>
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-6 h-12 border-b border-border flex-shrink-0">
+        <div className="w-6 h-6 bg-primary rounded-lg flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+          <Icons.Cube size={14} weight="duotone" />
         </div>
-
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-8">
-          {sections.map((section) => (
-            <div key={section.title}>
-              <h2 className="text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wider mb-3">
-                {section.title}
-              </h2>
-              <ul className="space-y-1">
-                {section.links.map((link) => {
-                  const Icon = link.icon;
-                  const isActive = pathname === link.href;
-                  return (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                          isActive
-                            ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                            : "text-sidebar-foreground hover:bg-sidebar-accent/50"
-                        }`}
-                        onClick={onClose}
-                      >
-                        <Icon className="w-4 h-4 mr-3" />
-                        {link.label}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </nav>
-
-        {/* Footer */}
-        <div className="px-4 py-4 border-t border-sidebar-border">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-sidebar-foreground/70 truncate">
-              {session?.user?.email || "user@example.com"}
-            </span>
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded-md text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors"
-              title="Logout"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+        <span className="font-mono text-sm font-semibold tracking-tight text-foreground">
+          brain <span className="text-primary">/</span> locus
+        </span>
+        <span className="font-mono text-[10px] text-muted-foreground ml-auto opacity-50">
+          v0.1.0
+        </span>
       </div>
-    </motion.div>
+
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto custom-scrollbar py-6">
+        <SidebarSection id="organize" label="Organize">
+          <SidebarItem href="/" icon={<Icons.SquaresFour weight="duotone" />} label="Dashboard" />
+          <SidebarItem href="/projects" icon={<Icons.Kanban weight="duotone" />} label="Projects" />
+          <SidebarItem href="/areas" icon={<Icons.CircleHalfTilt weight="duotone" />} label="Areas" />
+          <SidebarItem href="/resources" icon={<Icons.Archive weight="duotone" />} label="Resources" />
+          <SidebarItem href="/archives" icon={<Icons.FolderSimpleUser weight="duotone" />} label="Archives" />
+        </SidebarSection>
+
+        <SidebarSection id="work" label="Work">
+          <SidebarItem href="/tasks" icon={<Icons.CheckCircle weight="duotone" />} label="Tasks" />
+          <SidebarItem href="/notes" icon={<Icons.Note weight="duotone" />} label="Notes" />
+          <SidebarItem href="/files" icon={<Icons.Files weight="duotone" />} label="Files" />
+          <SidebarItem href="/calendar" icon={<Icons.Calendar weight="duotone" />} label="Calendar" />
+        </SidebarSection>
+
+        <SidebarSection id="journey" label="Journey">
+          <SidebarItem href="/journey/daily" icon={<Icons.ListChecks weight="duotone" />} label="Daily Log" />
+          <SidebarItem href="/journey/journal" icon={<Icons.BookOpen weight="duotone" />} label="Journal" />
+          <SidebarItem href="/journey/milestones" icon={<Icons.Star weight="duotone" />} label="Milestones" />
+          <SidebarItem href="/journey/review" icon={<Icons.ArrowClockwise weight="duotone" />} label="Weekly Review" />
+        </SidebarSection>
+
+        <SidebarSection id="focus" label="Focus">
+          <SidebarItem href="/focus" icon={<Icons.Timer weight="duotone" />} label="Pomodoro" />
+          <SidebarItem href="/focus/tips" icon={<Icons.Lightbulb weight="duotone" />} label="Science Tips" />
+        </SidebarSection>
+      </nav>
+
+      {/* User Footer */}
+      <div className="flex items-center gap-3 px-6 h-16 border-t border-border flex-shrink-0 bg-background/30 transition-colors hover:bg-background/50 cursor-pointer group">
+        <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-xs font-bold text-primary group-hover:scale-105 transition-transform">
+          R
+        </div>
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <span className="font-mono text-sm text-foreground truncate font-medium">
+            rida
+          </span>
+          <span className="font-mono text-[10px] text-muted-foreground flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+            online
+          </span>
+        </div>
+        <Icons.DotsThreeVertical className="text-muted-foreground group-hover:text-foreground transition-colors" />
+      </div>
+    </aside>
   );
 }
