@@ -40,6 +40,24 @@ export const taskRouter = router({
       });
     }),
 
+  update: protectedProcedure
+    .input(z.object({
+      id: z.string(),
+      title: z.string().min(1).optional(),
+      description: z.string().optional(),
+      priority: z.number().int().min(1).max(5).optional(),
+      completed: z.boolean().optional(),
+      containerId: z.string().optional(),
+      dueDate: z.date().nullable().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+      return ctx.prisma.task.update({
+        where: { id, userId: ctx.session.user.id },
+        data,
+      });
+    }),
+
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

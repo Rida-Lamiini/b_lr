@@ -73,6 +73,7 @@ model Task {
 
   // relations
   files File[]
+  timeblocks Timeblock[]
 }
 
 model Note {
@@ -123,7 +124,9 @@ model Timeblock {
   start     DateTime
   end       DateTime
   userId    String
+  taskId    String?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task      Task?    @relation(fields: [taskId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
