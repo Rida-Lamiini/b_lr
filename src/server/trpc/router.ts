@@ -8,6 +8,7 @@ import { timeblockRouter } from "./routers/timeblock";
 import { journalRouter } from "./routers/journal";
 import { milestoneRouter } from "./routers/milestone";
 import { journeyRouter } from "./routers/journey";
+import { noteRouter } from "./routers/note";
 
 export const appRouter = router({
   health: healthRouter,
@@ -18,6 +19,7 @@ export const appRouter = router({
   journal: journalRouter,
   milestone: milestoneRouter,
   journey: journeyRouter,
+  note: noteRouter,
 });
 
 export type AppRouter = typeof appRouter;
