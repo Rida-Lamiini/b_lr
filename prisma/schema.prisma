@@ -134,12 +134,17 @@ model Timeblock {
 
 model DailyLog {
   id        String   @id @default(cuid())
-  date      DateTime @unique
-  content   String
+  date      DateTime
+  mood      Int?     // 1-5
+  energy    Int?     // 1-5
+  sleep     Float?   // Hours
+  content   String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
 }
 
 model JournalEntry {

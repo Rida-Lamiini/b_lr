@@ -159,7 +159,7 @@ export default function FilesPage() {
                     </a>
                     <button 
                       onClick={() => deleteMutation.mutate({ id: file.id })}
-                      disabled={deleteMutation.isLoading}
+                      disabled={deleteMutation.isPending}
                       className="p-1.5 rounded-md hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
                       title="Delete"
                     >
