@@ -2,11 +2,11 @@
 
 import { SectionHeader } from "@/components/ui/section-header";
 import { trpc } from "@/lib/trpc-client";
+import { PARACard } from "@/components/para/para-card";
 import * as PhosphorIcons from "@phosphor-icons/react";
-import { cn } from "@/lib/utils";
 
 export default function AreasPage() {
-  const { data: areas, isLoading } = trpc.area.getAll.useQuery();
+  const { data: areas, isLoading } = trpc.para.getAll.useQuery({ type: "AREA" });
 
   return (
     <div className="space-y-6">
@@ -39,40 +39,18 @@ export default function AreasPage() {
           </div>
         ) : (
           areas?.map((area) => (
-            <div key={area.id} className="interactive-card p-6 flex flex-col gap-4 group">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-md bg-secondary flex items-center justify-center text-foreground border border-border">
-                    <PhosphorIcons.Briefcase weight="duotone" size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-[16px] font-semibold group-hover:text-primary transition-colors">
-                      {area.name}
-                    </h3>
-                    <p className="text-[12px] text-muted-foreground line-clamp-1">
-                      {area.description || "No description"}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-auto pt-4 border-t border-border flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-                    <PhosphorIcons.Folders size={14} />
-                    0 Projects
-                  </div>
-                  <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-                    <PhosphorIcons.CheckCircle size={14} />
-                    0 Active
-                  </div>
-                </div>
-                <div 
-                  className="w-3 h-3 rounded-full" 
-                  style={{ backgroundColor: area.color || "var(--primary)" }} 
-                />
-              </div>
-            </div>
+            <PARACard
+              key={area.id}
+              id={area.id}
+              name={area.name}
+              description={area.description}
+              type="AREA"
+              updatedAt={area.updatedAt}
+              stats={{
+                tasks: (area as any)._count?.tasks ?? 0,
+                notes: (area as any)._count?.notes ?? 0
+              }}
+            />
           ))
         )}
       </div>

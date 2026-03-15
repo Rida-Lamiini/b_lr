@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 
 export default function TasksPage() {
-  const { data: tasks, isLoading, refetch } = trpc.task.getAll.useQuery();
-  const toggleMutation = trpc.task.toggleStatus.useMutation({
+  const { data: tasks, isLoading, refetch } = trpc.task.getAll.useQuery({});
+  const toggleMutation = trpc.task.toggle.useMutation({
     onSuccess: () => refetch(),
   });
 
@@ -46,7 +46,7 @@ export default function TasksPage() {
             {tasks?.map((task) => (
               <div key={task.id} className="group p-3 flex items-center gap-3 hover:bg-secondary/30 transition-colors">
                 <button 
-                  onClick={() => toggleMutation.mutate({ id: task.id })}
+                  onClick={() => toggleMutation.mutate({ id: task.id, completed: !task.completed })}
                   className={cn(
                     "w-5 h-5 rounded-full border flex items-center justify-center transition-colors",
                     task.completed 
@@ -61,7 +61,7 @@ export default function TasksPage() {
                     "text-[14px] transition-all",
                     task.completed ? "text-muted-foreground line-through" : "text-foreground"
                   )}>
-                    {task.content}
+                    {task.title}
                   </p>
                   {task.containerId && (
                     <span className="text-[10px] text-primary hover:underline cursor-pointer">
