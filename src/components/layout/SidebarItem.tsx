@@ -21,26 +21,29 @@ export function SidebarItem({ href, icon, label, count, dot }: SidebarItemProps)
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 px-4 py-2 mx-2 rounded-xl transition-all duration-200 group no-underline",
+        "flex items-center gap-3 px-3 py-1.5 mx-2 rounded-md transition-all duration-200 group no-underline relative",
         isActive
-          ? "bg-primary/10 text-primary font-medium shadow-[inset_0_0_12px_rgba(124,58,237,0.05)] border-l-2 border-primary rounded-l-none"
+          ? "bg-secondary text-foreground font-medium"
           : "text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
       )}
     >
+      {isActive && (
+        <div className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-primary rounded-full" />
+      )}
       <span className={cn(
-        "flex-shrink-0 transition-colors duration-200",
+        "flex-shrink-0 transition-colors",
         isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
       )}>
         {icon}
       </span>
-      <span className="flex-1 truncate font-mono text-xs tracking-tight">{label}</span>
+      <span className="flex-1 truncate text-xs font-medium">{label}</span>
       {count !== undefined && count > 0 && (
-        <span className="font-mono text-[10px] bg-secondary text-muted-foreground px-2 py-0.5 rounded-full border border-border">
+        <span className="text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full border border-border">
           {count}
         </span>
       )}
       {dot && (
-        <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_hsla(142,70%,50%,0.4)] flex-shrink-0" />
+        <span className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
       )}
     </Link>
   );

@@ -38,17 +38,17 @@ export function SidebarSection({
     <div className="mb-4">
       <button
         onClick={toggle}
-        className="flex items-center gap-2 w-full px-6 py-1 text-left group transition-colors"
+        className="flex items-center gap-2 w-full px-6 py-1.5 text-left group transition-colors"
       >
         <CaretDown 
           size={10} 
           weight="bold"
           className={cn(
-            "text-muted-foreground/50 transition-transform duration-200 group-hover:text-muted-foreground",
+            "text-muted-foreground transition-transform duration-200",
             !open && "-rotate-90"
           )}
         />
-        <span className="font-mono text-[10px] font-bold text-muted-foreground/50 uppercase tracking-[0.1em] group-hover:text-muted-foreground transition-colors">
+        <span className="text-[11px] font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
           {label}
         </span>
       </button>

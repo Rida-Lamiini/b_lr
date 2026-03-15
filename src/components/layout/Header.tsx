@@ -48,26 +48,26 @@ export function Header({ onMenuClick }: HeaderProps) {
 
   return (
     <header className={cn(
-      "flex items-center gap-3 px-5 h-10 flex-shrink-0",
-      "bg-bg-1 border-b border-border-subtle"
+      "flex items-center gap-3 px-5 h-12 flex-shrink-0",
+      "bg-card border-b border-border"
     )}>
 
       {/* Mobile menu button */}
       <button
         onClick={onMenuClick}
-        className="lg:hidden text-text-3 hover:text-text-2 font-mono text-sm"
+        className="lg:hidden text-muted-foreground hover:text-foreground text-lg"
         title="Toggle menu"
       >
         ☰
       </button>
 
       {/* Breadcrumb */}
-      <div className="flex items-center gap-1.5 font-mono text-xs text-text-3">
-        <span className="text-text-3">brain</span>
+      <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
+        <span className="text-muted-foreground">brain</span>
         {breadcrumb.map((segment, i) => (
           <span key={i} className="flex items-center gap-1.5">
-            <span className="text-text-3">/</span>
-            <span className={i === breadcrumb.length - 1 ? "text-text-1" : "text-text-3"}>
+            <span className="text-muted-foreground">/</span>
+            <span className={i === breadcrumb.length - 1 ? "text-foreground font-semibold" : "text-muted-foreground"}>
               {segment}
             </span>
           </span>
@@ -81,7 +81,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
       {/* Right: date */}
       <div className="flex items-center gap-3">
-        <span className="font-mono text-2xs text-text-3 hidden sm:block">
+        <span className="text-[11px] text-muted-foreground hidden sm:block">
           {today}
         </span>
         <Kbd keys={["⌘K"]} />

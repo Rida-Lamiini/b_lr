@@ -12,11 +12,10 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="space-y-12 max-w-6xl mx-auto">
-      <div className="space-y-6">
+    <div className="space-y-10 max-w-6xl mx-auto">
+      <div className="space-y-4">
         <SectionHeader label="System Overview" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* PARA Method Cards */}
           <StatCard label="Projects" value="0" />
           <StatCard label="Areas" value="0" />
           <StatCard label="Resources" value="0" />
@@ -24,51 +23,50 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="space-y-6">
+      <div className="space-y-4">
         <SectionHeader label="Engine Procedures" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="interactive-card p-6 flex flex-col items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shadow-lg shadow-primary/5">
-              <Icons.Quotes size={20} weight="duotone" />
+          <div className="gh-box p-6 flex flex-col items-start gap-4 transition-all hover:border-muted-foreground/30">
+            <div className="w-10 h-10 rounded bg-[#1f6feb]/10 flex items-center justify-center text-[#58a6ff]">
+              <Icons.Quotes size={20} weight="bold" />
             </div>
             <div>
-              <h3 className="font-mono text-sm font-bold text-foreground mb-1 tracking-tight">Journey Log</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Record daily reflections and synaptic connections
+              <h3 className="text-[14px] font-semibold text-foreground mb-1">Journey Log</h3>
+              <p className="text-[12px] text-muted-foreground leading-relaxed">
+                Record daily reflections and synaptic connections in your neural journal.
               </p>
             </div>
-            <button className="mt-auto px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg text-xs font-mono font-bold transition-all duration-200">
+            <button className="mt-auto px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
               Execute Procedure
             </button>
           </div>
 
-          <div className="interactive-card p-6 flex flex-col items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500 border border-green-500/20 shadow-lg shadow-green-500/5">
-              <Icons.HourglassSimple size={20} weight="duotone" />
+          <div className="gh-box p-6 flex flex-col items-start gap-4 transition-all hover:border-muted-foreground/30">
+            <div className="w-10 h-10 rounded bg-[#238636]/10 flex items-center justify-center text-[#3fb950]">
+              <Icons.HourglassSimple size={20} weight="bold" />
             </div>
             <div>
-              <h3 className="font-mono text-sm font-bold text-foreground mb-1 tracking-tight">Timeboxing</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Schedule focused temporal blocks for deep work
+              <h3 className="text-[14px] font-semibold text-foreground mb-1">Timeboxing</h3>
+              <p className="text-[12px] text-muted-foreground leading-relaxed">
+                Schedule focused temporal blocks for deep work and atomic progress.
               </p>
             </div>
-            <button className="mt-auto px-4 py-2 bg-green-500/10 hover:bg-green-500/20 text-green-500 border border-green-500/20 rounded-lg text-xs font-mono font-bold transition-all duration-200">
+            <button className="mt-auto px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
               Allocate Block
             </button>
           </div>
 
-          <div className="interactive-card p-6 flex flex-col items-start gap-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20 shadow-lg shadow-blue-500/5">
-              <Icons.Brain size={20} weight="duotone" />
+          <div className="gh-box p-6 flex flex-col items-start gap-4 transition-all hover:border-muted-foreground/30">
+            <div className="w-10 h-10 rounded bg-[#ab7df8]/10 flex items-center justify-center text-[#d2a8ff]">
+              <Icons.Brain size={20} weight="bold" />
             </div>
             <div>
-              <h3 className="font-mono text-sm font-bold text-foreground mb-1 tracking-tight">Focus Engine</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Initiate high-cogency session with neuro-optimization
+              <h3 className="text-[14px] font-semibold text-foreground mb-1">Focus Engine</h3>
+              <p className="text-[12px] text-muted-foreground leading-relaxed">
+                Initiate high-cogency session with neuro-optimization and science tips.
               </p>
             </div>
-            <button className="mt-auto px-4 py-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 border border-blue-500/20 rounded-lg text-xs font-mono font-bold transition-all duration-200">
+            <button className="mt-auto px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
               Initialize Core
             </button>
           </div>

@@ -18,20 +18,20 @@ export function StatCard({
   return (
     <div
       className={cn(
-        "interactive-card p-5 group flex flex-col gap-2",
+        "gh-box p-4 flex flex-col gap-1 transition-all hover:border-muted-foreground/30",
         className
       )}
     >
-      <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider font-bold group-hover:text-primary transition-colors">
+      <p className="text-[12px] font-medium text-muted-foreground tracking-tight">
         {label}
       </p>
       <div className="flex items-baseline gap-2">
-        <p className="font-mono text-2xl font-bold text-foreground leading-none tracking-tight">
+        <p className="text-2xl font-semibold text-foreground tracking-tight">
           {value}
         </p>
         {trend !== "neutral" && (
           <span className={cn(
-            "text-[10px] font-mono",
+            "text-[10px] font-medium",
             trend === "up" ? "text-green-500" : "text-destructive"
           )}>
             {trend === "up" ? "↑" : "↓"}
@@ -39,7 +39,7 @@ export function StatCard({
         )}
       </div>
       {sub && (
-        <p className="font-mono text-[10px] text-muted-foreground/60 mt-1">
+        <p className="text-[11px] text-muted-foreground mt-0.5">
           {sub}
         </p>
       )}

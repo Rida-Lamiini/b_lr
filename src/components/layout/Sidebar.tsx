@@ -13,19 +13,16 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <aside className={cn(
-      "fixed inset-y-0 left-0 z-50 flex flex-col w-64 min-w-[256px] h-screen bg-card/50 backdrop-blur-xl border-r border-border overflow-hidden transition-transform duration-300 lg:relative lg:translate-x-0",
+      "fixed inset-y-0 left-0 z-50 flex flex-col w-64 min-w-[256px] h-screen bg-card border-r border-border overflow-hidden transition-transform duration-300 lg:relative lg:translate-x-0",
       !isOpen && "-translate-x-full"
     )}>
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 h-12 border-b border-border flex-shrink-0">
-        <div className="w-6 h-6 bg-primary rounded-lg flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-          <Icons.Cube size={14} weight="duotone" />
+        <div className="w-5 h-5 bg-primary rounded flex items-center justify-center text-primary-foreground">
+          <Icons.Cube size={12} weight="bold" />
         </div>
-        <span className="font-mono text-sm font-semibold tracking-tight text-foreground">
+        <span className="text-sm font-semibold tracking-tight text-foreground">
           brain <span className="text-primary">/</span> locus
-        </span>
-        <span className="font-mono text-[10px] text-muted-foreground ml-auto opacity-50">
-          v0.1.0
         </span>
       </div>
 
@@ -60,16 +57,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       </nav>
 
       {/* User Footer */}
-      <div className="flex items-center gap-3 px-6 h-16 border-t border-border flex-shrink-0 bg-background/30 transition-colors hover:bg-background/50 cursor-pointer group">
-        <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-xs font-bold text-primary group-hover:scale-105 transition-transform">
+      <div className="flex items-center gap-3 px-6 h-14 border-t border-border flex-shrink-0 hover:bg-secondary/50 cursor-pointer transition-colors group">
+        <div className="w-7 h-7 rounded bg-primary/20 border border-primary/30 flex items-center justify-center text-[10px] font-bold text-primary">
           R
         </div>
         <div className="flex flex-col flex-1 overflow-hidden">
-          <span className="font-mono text-sm text-foreground truncate font-medium">
+          <span className="text-sm text-foreground truncate font-medium">
             rida
           </span>
-          <span className="font-mono text-[10px] text-muted-foreground flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+          <span className="text-[10px] text-muted-foreground flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
             online
           </span>
         </div>
