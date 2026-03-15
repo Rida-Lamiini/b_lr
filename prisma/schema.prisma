@@ -28,6 +28,7 @@ model User {
   timeblocks     Timeblock[]
   dailyLogs      DailyLog[]
   journalEntries JournalEntry[]
+  milestones     Milestone[]
   weeklyReviews  WeeklyReview[]
   focusSessions  FocusSession[]
   habitLogs      HabitLog[]
@@ -143,12 +144,24 @@ model DailyLog {
 
 model JournalEntry {
   id        String   @id @default(cuid())
+  title     String?
   date      DateTime
   content   String
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Milestone {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model WeeklyReview {
