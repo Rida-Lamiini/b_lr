@@ -1,8 +1,56 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { startOfDay, endOfDay } from "date-fns";
+import { startOfDay, endOfDay, subMonths, format } from "date-fns";
 
 export const dashboardRouter = router({
+  getActivityHeatmap: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user?.id;
+    if (!userId) throw new Error("Unauthorized");
+
+    const sixMonthsAgo = subMonths(startOfDay(new Date()), 6);
+
+    const completedTasks = await ctx.prisma.task.findMany({
+      where: {
+        userId,
+        completed: true,
+        updatedAt: { gte: sixMonthsAgo },
+      },
+      select: { updatedAt: true },
+    });
+
+    // Group by date string
+    const counts = new Map<string, number>();
+    for (const t of completedTasks) {
+      const key = format(t.updatedAt, "yyyy-MM-dd");
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+
+    return Array.from(counts.entries()).map(([date, value]) => ({
+      date,
+      value,
+    }));
+  }),
+
+  getPartitionData: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user?.id;
+    if (!userId) throw new Error("Unauthorized");
+
+    const containers = await ctx.prisma.container.findMany({
+      where: { userId },
+      include: {
+        _count: { select: { tasks: true, notes: true } },
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    return containers.map((c) => ({
+      id: c.id,
+      label: c.name,
+      value: c._count.tasks + c._count.notes,
+      group: c.type,
+      sub: `${c._count.tasks} tasks · ${c._count.notes} notes`,
+    }));
+  }),
   getStats: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.user?.id;
     if (!userId) throw new Error("Unauthorized");

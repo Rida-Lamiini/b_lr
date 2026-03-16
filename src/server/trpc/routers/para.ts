@@ -5,22 +5,76 @@ export const paraRouter = router({
   getAll: protectedProcedure
     .input(z.object({ 
       type: z.enum(["PROJECT", "AREA", "RESOURCE", "ARCHIVE"]).optional(),
-      includeArchived: z.boolean().optional().default(false)
+      includeArchived: z.boolean().optional().default(false),
+      skip: z.number().optional(),
+      take: z.number().optional(),
+      orderBy: z.enum(["updatedAt_desc", "updatedAt_asc", "name_asc", "name_desc"]).optional().default("updatedAt_desc"),
+      filter: z.enum(["all", "withTasks", "noTasks", "active", "completed"]).optional().default("all"),
     }))
     .query(async ({ ctx, input }) => {
-      return ctx.prisma.container.findMany({
-        where: {
-          userId: ctx.session.user.id,
-          ...(input.type && { type: input.type }),
-          // In the future, we might add an 'archived' boolean to the schema.
-          // For now, ARCHIVE is a type itself in the schema.
-        },
-        orderBy: { updatedAt: "desc" },
+      const where: any = {
+        userId: ctx.session.user.id,
+        ...(input.type && { type: input.type }),
+      };
+
+      if (!input.includeArchived && input.type !== "ARCHIVE") {
+        where.type = { not: "ARCHIVE" };
+      }
+
+      if (input.filter === "noTasks") {
+        where.tasks = { none: {} };
+      } else if (input.filter === "withTasks") {
+        where.tasks = { some: {} };
+      } else if (input.filter === "active") {
+        where.tasks = { some: { completed: false } };
+      } else if (input.filter === "completed") {
+        where.tasks = { some: {}, every: { completed: true } };
+      }
+
+      const orderBy =
+        input.orderBy === "name_asc" ? { name: "asc" } :
+        input.orderBy === "name_desc" ? { name: "desc" } :
+        input.orderBy === "updatedAt_asc" ? { updatedAt: "asc" } :
+        { updatedAt: "desc" };
+
+      const containers = await ctx.prisma.container.findMany({
+        where,
+        orderBy,
+        skip: input.skip,
+        take: input.take,
         include: {
           _count: {
             select: { tasks: true, notes: true }
           }
         }
+      });
+
+      if (!containers.length) {
+        return containers;
+      }
+
+      const completedTasksByContainer = Object.fromEntries(
+        (await ctx.prisma.task.groupBy({
+          by: ["containerId"],
+          where: {
+            containerId: { in: containers.map((c) => c.id) },
+            userId: ctx.session.user.id,
+            completed: true,
+          },
+          _count: { _all: true },
+        })).map((item) => [item.containerId, item._count._all])
+      );
+
+      return containers.map((container) => {
+        const totalTasks = container._count?.tasks ?? 0;
+        const completedTasks = completedTasksByContainer[container.id] ?? 0;
+        const isComplete = totalTasks > 0 && completedTasks === totalTasks;
+
+        return {
+          ...container,
+          completedTasks,
+          isComplete,
+        };
       });
     }),
 

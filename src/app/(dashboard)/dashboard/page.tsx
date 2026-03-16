@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import { StatCard } from "@/components/ui/stat-card"
 import { SectionHeader } from "@/components/ui/section-header"
 import { DashboardStats } from "@/components/dashboard/DashboardStats"
+import { ActivityHeatmap } from "@/components/dashboard/ActivityHeatmap"
+import { WorkloadPartition } from "@/components/dashboard/WorkloadPartition"
 import * as Icons from "@phosphor-icons/react/dist/ssr"
 
 export default async function DashboardPage() {
@@ -29,6 +31,16 @@ export default async function DashboardPage() {
       <div className="space-y-4">
         <SectionHeader label="System Metrics" />
         <DashboardStats />
+      </div>
+
+      <div className="space-y-4">
+        <SectionHeader label="Activity Matrix" />
+        <ActivityHeatmap />
+      </div>
+
+      <div className="space-y-4">
+        <SectionHeader label="Workload Distribution" />
+        <WorkloadPartition />
       </div>
 
       <div className="space-y-4">
