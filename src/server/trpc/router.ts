@@ -12,6 +12,8 @@ import { noteRouter } from "./routers/note";
 import { fileRouter } from "./routers/file";
 import { dailyLogRouter } from "./routers/dailyLog";
 
+import { habitRouter } from "./routers/habit";
+
 export const appRouter = router({
   health: healthRouter,
   container: containerRouter,
@@ -24,6 +26,7 @@ export const appRouter = router({
   note: noteRouter,
   file: fileRouter,
   dailyLog: dailyLogRouter,
+  habit: habitRouter,
 });
 
 export type AppRouter = typeof appRouter;

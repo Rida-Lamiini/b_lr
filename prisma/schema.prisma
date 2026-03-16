@@ -31,6 +31,7 @@ model User {
   milestones     Milestone[]
   weeklyReviews  WeeklyReview[]
   focusSessions  FocusSession[]
+  habits         Habit[]
   habitLogs      HabitLog[]
   tipHistories   TipHistory[]
 }
@@ -191,15 +192,35 @@ model FocusSession {
   updatedAt DateTime @updatedAt
 }
 
+model Habit {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  icon        String?   // Phosphor icon name
+  color       String?   // Hex or Tailwind color class
+  frequency   String    @default("DAILY") // DAILY, WEEKLY, etc.
+  active      Boolean   @default(true)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // relations
+  logs        HabitLog[]
+}
+
 model HabitLog {
   id        String   @id @default(cuid())
-  habit     String
   date      DateTime
   completed Boolean  @default(false)
+  habitId   String
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, habitId, date])
 }
 
 model TipHistory {

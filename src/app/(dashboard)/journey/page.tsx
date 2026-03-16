@@ -8,9 +8,11 @@ import { JournalView } from "@/components/journey/journal-view";
 import { MilestoneView } from "@/components/journey/milestone-view";
 import { TimelineView } from "@/components/journey/timeline-view";
 
+import { HabitView } from "@/components/journey/habit-view";
+
 import DailyLogPage from "./daily/page";
 
-type Tab = "timeline" | "journal" | "milestones" | "daily";
+type Tab = "timeline" | "journal" | "milestones" | "habits" | "daily";
 
 export default function JourneyPage() {
   const [activeTab, setActiveTab] = useState<Tab>("timeline");
@@ -18,6 +20,7 @@ export default function JourneyPage() {
   const tabs: { id: Tab; label: string; icon: any }[] = [
     { id: "timeline", label: "Timeline", icon: PhosphorIcons.Path },
     { id: "journal", label: "Journal", icon: PhosphorIcons.Notebook },
+    { id: "habits", label: "Habits", icon: PhosphorIcons.Fire },
     { id: "milestones", label: "Milestones", icon: PhosphorIcons.Flag },
     { id: "daily", label: "Daily Status", icon: PhosphorIcons.Pulse },
   ];
@@ -55,6 +58,7 @@ export default function JourneyPage() {
         <div className="max-w-4xl mx-auto">
           {activeTab === "timeline" && <TimelineView />}
           {activeTab === "journal" && <JournalView />}
+          {activeTab === "habits" && <HabitView />}
           {activeTab === "milestones" && <MilestoneView />}
           {activeTab === "daily" && <DailyLogPage />}
         </div>
