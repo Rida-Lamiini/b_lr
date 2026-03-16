@@ -21,7 +21,7 @@ export function TimelineView() {
       <div className="space-y-12 relative z-10">
         {timeline?.map((item, index) => {
           const isLeft = index % 2 === 0;
-          const config = {
+          const configMap = {
             journal: {
               icon: PhosphorIcons.Notebook,
               color: "text-primary",
@@ -42,9 +42,17 @@ export function TimelineView() {
               bg: "bg-emerald-500/10",
               border: "border-emerald-500/20",
               label: "Task Accomplished"
+            },
+            dailyLog: {
+              icon: PhosphorIcons.Pulse,
+              color: "text-rose-400",
+              bg: "bg-rose-400/10",
+              border: "border-rose-400/20",
+              label: "Status Sync"
             }
-          }[item.type];
-
+          };
+          
+          const config = configMap[item.type as keyof typeof configMap];
           const Icon = config.icon;
 
           return (

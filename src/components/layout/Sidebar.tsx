@@ -13,64 +13,64 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <aside className={cn(
-      "fixed inset-y-0 left-0 z-50 flex flex-col w-64 min-w-[256px] h-screen bg-card border-r border-border overflow-hidden transition-transform duration-300 lg:relative lg:translate-x-0",
+      "fixed inset-y-0 left-0 z-50 flex flex-col w-64 min-w-[256px] h-screen bg-background/60 backdrop-blur-xl border-r border-border/40 overflow-hidden transition-transform duration-300 lg:relative lg:translate-x-0 group/sidebar",
       !isOpen && "-translate-x-full"
     )}>
+      {/* Decorative gradient glow */}
+      <div className="absolute -top-24 -left-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full pointer-events-none opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-1000" />
+      
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 h-12 border-b border-border flex-shrink-0">
-        <div className="w-5 h-5 bg-primary rounded flex items-center justify-center text-primary-foreground">
-          <Icons.Cube size={12} weight="bold" />
+      <div className="flex items-center gap-3 px-6 h-14 border-b border-border/40 flex-shrink-0 relative z-10">
+        <div className="w-6 h-6 bg-primary rounded-lg flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+          <Icons.Cube size={14} weight="bold" />
         </div>
-        <span className="text-sm font-semibold tracking-tight text-foreground">
-          brain <span className="text-primary">/</span> locus
+        <span className="text-sm font-bold tracking-tight text-foreground font-mono">
+          BRAIN <span className="text-primary font-light opacity-50">/</span> LOCUS
         </span>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto custom-scrollbar py-6">
-        <SidebarSection id="organize" label="Organize">
-          <SidebarItem href="/" icon={<Icons.SquaresFour weight="duotone" />} label="Dashboard" />
-          <SidebarItem href="/projects" icon={<Icons.Kanban weight="duotone" />} label="Projects" />
-          <SidebarItem href="/areas" icon={<Icons.CircleHalfTilt weight="duotone" />} label="Areas" />
-          <SidebarItem href="/resources" icon={<Icons.Archive weight="duotone" />} label="Resources" />
-          <SidebarItem href="/archives" icon={<Icons.FolderSimpleUser weight="duotone" />} label="Archives" />
+      <nav className="flex-1 overflow-y-auto custom-scrollbar pt-6 pb-4 relative z-10">
+        <SidebarSection id="organize" label="Synthesis">
+          <SidebarItem href="/" icon={<Icons.SquaresFour weight="duotone" />} label="Locus Overview" />
+          <SidebarItem href="/projects" icon={<Icons.Kanban weight="duotone" />} label="Active Projects" />
+          <SidebarItem href="/areas" icon={<Icons.CircleHalfTilt weight="duotone" />} label="Areas of Life" />
+          <SidebarItem href="/resources" icon={<Icons.Archive weight="duotone" />} label="Knowledge Base" />
         </SidebarSection>
 
-        <SidebarSection id="work" label="Work">
-          <SidebarItem href="/tasks" icon={<Icons.CheckCircle weight="duotone" />} label="Tasks" />
-          <SidebarItem href="/notes" icon={<Icons.Note weight="duotone" />} label="Notes" />
-          <SidebarItem href="/files" icon={<Icons.Files weight="duotone" />} label="Files" />
-          <SidebarItem href="/calendar" icon={<Icons.Calendar weight="duotone" />} label="Calendar" />
+        <SidebarSection id="work" label="Execution">
+          <SidebarItem href="/tasks" icon={<Icons.CheckCircle weight="duotone" />} label="Task Engine" />
+          <SidebarItem href="/notes" icon={<Icons.Note weight="duotone" />} label="Neural Notes" />
+          <SidebarItem href="/files" icon={<Icons.Files weight="duotone" />} label="Vault Files" />
+          <SidebarItem href="/calendar" icon={<Icons.Calendar weight="duotone" />} label="Temporal Map" />
         </SidebarSection>
 
-        <SidebarSection id="journey" label="Journey">
-          <SidebarItem href="/journey/daily" icon={<Icons.ListChecks weight="duotone" />} label="Daily Log" />
-          <SidebarItem href="/journey/journal" icon={<Icons.BookOpen weight="duotone" />} label="Journal" />
-          <SidebarItem href="/journey/milestones" icon={<Icons.Star weight="duotone" />} label="Milestones" />
-          <SidebarItem href="/journey/review" icon={<Icons.ArrowClockwise weight="duotone" />} label="Weekly Review" />
+        <SidebarSection id="journey" label="Ascension">
+          <SidebarItem href="/journey" icon={<Icons.Path weight="duotone" />} label="Venture Journey" />
+          <SidebarItem href="/journey/daily" icon={<Icons.Pulse weight="duotone" />} label="Daily Sync" />
+          <SidebarItem href="/journey/review" icon={<Icons.ArrowClockwise weight="duotone" />} label="Weekly Delta" />
         </SidebarSection>
 
-        <SidebarSection id="focus" label="Focus">
-          <SidebarItem href="/focus" icon={<Icons.Timer weight="duotone" />} label="Pomodoro" />
-          <SidebarItem href="/focus/tips" icon={<Icons.Lightbulb weight="duotone" />} label="Science Tips" />
+        <SidebarSection id="focus" label="Deep Work">
+          <SidebarItem href="/focus" icon={<Icons.Timer weight="duotone" />} label="Flow State" />
         </SidebarSection>
       </nav>
 
       {/* User Footer */}
-      <div className="flex items-center gap-3 px-6 h-14 border-t border-border flex-shrink-0 hover:bg-secondary/50 cursor-pointer transition-colors group">
-        <div className="w-7 h-7 rounded bg-primary/20 border border-primary/30 flex items-center justify-center text-[10px] font-bold text-primary">
+      <div className="flex items-center gap-3 px-5 h-16 border-t border-border/40 flex-shrink-0 hover:bg-primary/5 cursor-pointer transition-all duration-300 relative z-10 group/user">
+        <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] font-bold text-primary shadow-inner">
           R
         </div>
         <div className="flex flex-col flex-1 overflow-hidden">
-          <span className="text-sm text-foreground truncate font-medium">
+          <span className="text-xs text-foreground truncate font-bold uppercase tracking-wider font-mono">
             rida
           </span>
-          <span className="text-[10px] text-muted-foreground flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-            online
+          <span className="text-[9px] text-muted-foreground flex items-center gap-1.5 uppercase font-medium tracking-tight">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+            Core System Active
           </span>
         </div>
-        <Icons.DotsThreeVertical className="text-muted-foreground group-hover:text-foreground transition-colors" />
+        <Icons.DotsThreeVertical className="text-muted-foreground group-hover/user:text-foreground transition-colors" />
       </div>
     </aside>
   );

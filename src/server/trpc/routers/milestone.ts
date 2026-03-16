@@ -15,6 +15,7 @@ export const milestoneRouter = router({
       id: z.string().optional(),
       title: z.string(),
       description: z.string().optional().nullable(),
+      category: z.string().optional().nullable(),
       date: z.date(),
     }))
     .mutation(async ({ ctx, input }) => {

@@ -162,6 +162,7 @@ model Milestone {
   id          String   @id @default(cuid())
   title       String
   description String?
+  category    String?  @default("general")
   date        DateTime
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)

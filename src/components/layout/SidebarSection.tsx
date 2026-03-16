@@ -35,22 +35,22 @@ export function SidebarSection({
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-6 last:mb-0">
       <button
         onClick={toggle}
-        className="flex items-center gap-2 w-full px-6 py-1.5 text-left group transition-colors"
+        className="flex items-center gap-3 w-full px-7 py-2 text-left group transition-all"
       >
+        <span className="text-[9px] font-black font-mono text-muted-foreground/60 uppercase tracking-[0.25em] group-hover:text-primary transition-colors flex-1">
+          {label}
+        </span>
         <CaretDown 
           size={10} 
           weight="bold"
           className={cn(
-            "text-muted-foreground transition-transform duration-200",
+            "text-muted-foreground/40 transition-transform duration-300 group-hover:text-primary",
             !open && "-rotate-90"
           )}
         />
-        <span className="text-[11px] font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
-          {label}
-        </span>
       </button>
       {open && (
         <div className="mt-1 flex flex-col gap-0.5">
