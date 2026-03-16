@@ -16,6 +16,8 @@ import { habitRouter } from "./routers/habit";
 
 import { searchRouter } from "./routers/search";
 import { dashboardRouter } from "./routers/dashboard";
+import { weeklyReviewRouter } from "./routers/weeklyReview";
+import { focusRouter } from "./routers/focus";
 
 export const appRouter = router({
   health: healthRouter,
@@ -32,6 +34,8 @@ export const appRouter = router({
   habit: habitRouter,
   search: searchRouter,
   dashboard: dashboardRouter,
+  weeklyReview: weeklyReviewRouter,
+  focus: focusRouter,
 });
 
 export type AppRouter = typeof appRouter;
