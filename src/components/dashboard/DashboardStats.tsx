@@ -2,6 +2,7 @@
 
 import { trpc } from "@/lib/trpc-client";
 import { StatCard } from "@/components/ui/stat-card";
+import { BackupControl } from "@/components/dashboard/BackupControl";
 
 export function DashboardStats() {
   const { data: stats, isLoading } = trpc.dashboard.getStats.useQuery();
@@ -58,11 +59,7 @@ export function DashboardStats() {
           value={stats?.notes.total ?? 0} 
           sub="Total research notes"
         />
-        <StatCard 
-          label="System Health" 
-          value="100%" 
-          sub="Neural core nominal"
-        />
+        <BackupControl />
       </div>
     </div>
   );
