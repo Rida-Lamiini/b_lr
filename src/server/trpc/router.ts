@@ -18,6 +18,7 @@ import { searchRouter } from "./routers/search";
 import { dashboardRouter } from "./routers/dashboard";
 import { weeklyReviewRouter } from "./routers/weeklyReview";
 import { focusRouter } from "./routers/focus";
+import { graphRouter } from "./routers/graph";
 
 export const appRouter = router({
   health: healthRouter,
@@ -36,6 +37,7 @@ export const appRouter = router({
   dashboard: dashboardRouter,
   weeklyReview: weeklyReviewRouter,
   focus: focusRouter,
+  graph: graphRouter,
 });
 
 export type AppRouter = typeof appRouter;

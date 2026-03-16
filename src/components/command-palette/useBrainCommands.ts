@@ -85,6 +85,13 @@ export function useBrainCommands() {
         shortcut: ["G", "F"],
         action: () => router.push("/focus"),
       },
+      {
+        id: "nav-graph",
+        label: "Go to Brain Graph",
+        icon: "⊛",
+        group: "navigate",
+        action: () => router.push("/graph"),
+      },
 
       // ── Create ────────────────────────────────────────
       {
