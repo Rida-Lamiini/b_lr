@@ -230,7 +230,7 @@ export function HabitView() {
                 </button>
                 <button 
                   onClick={() => upsertMutation.mutate(newHabit)}
-                  disabled={!newHabit.title || upsertMutation.isLoading}
+                  disabled={!newHabit.title || upsertMutation.isPending}
                   className="flex-1 px-4 py-2.5 rounded-lg bg-primary text-black text-sm font-bold transition-opacity disabled:opacity-50"
                 >
                   Create Habit
