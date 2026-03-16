@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { StatCard } from "@/components/ui/stat-card";
+import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc-client";
 import { PARACard } from "@/components/para/para-card";
 import * as PhosphorIcons from "@phosphor-icons/react";
@@ -13,7 +14,12 @@ export default function ProjectsPage() {
 
   const [sortBy, setSortBy] = useState<SortOption>("updatedAt_desc");
   const [filter, setFilter] = useState<FilterOption>("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState<number>(0);
+  const [isCreating, setIsCreating] = useState(false);
+  const [newProjectName, setNewProjectName] = useState("");
+  const [newProjectDesc, setNewProjectDesc] = useState("");
+
   const [projectList, setProjectList] = useState<
     Array<{
       id: string;
@@ -74,15 +80,33 @@ export default function ProjectsPage() {
     return `${Math.round((completedProjects / projectList.length) * 100)}%`;
   }, [projectList.length, completedProjects]);
 
+  const visibleProjects = useMemo(() => {
+    const query = searchTerm.toLowerCase().trim();
+    if (!query) return projectList;
+    return projectList.filter((project) => {
+      const name = project.name.toLowerCase();
+      const description = project.description?.toLowerCase() ?? "";
+      return name.includes(query) || description.includes(query);
+    });
+  }, [projectList, searchTerm]);
+
+  function handleResetCreateForm() {
+    setNewProjectName("");
+    setNewProjectDesc("");
+    setIsCreating(false);
+  }
+
   async function handleCreateNewProject() {
-    const name = window.prompt("Enter project name:");
-    if (!name || !name.trim()) return;
+    const name = newProjectName.trim();
+    if (!name) return;
 
     createProjectMutation.mutate({
-      name: name.trim(),
+      name,
       type: "PROJECT",
-      description: "",
+      description: newProjectDesc.trim() || "",
     });
+
+    handleResetCreateForm();
   }
 
   return (
@@ -91,20 +115,65 @@ export default function ProjectsPage() {
         label="Projects"
         action={
           <button
-            onClick={handleCreateNewProject}
+            onClick={() => setIsCreating((prev) => !prev)}
             className="flex items-center gap-1.5 bg-[#238636] hover:bg-[#2ea043] text-white px-3 py-1 rounded-md text-[12px] font-semibold transition-colors"
             aria-label="Create a new project"
           >
             <PhosphorIcons.Plus size={14} weight="bold" />
-            New Project
+            {isCreating ? "Cancel" : "New Project"}
           </button>
         }
       />
+
+      {isCreating && (
+        <div className="gh-box p-4 rounded-md border border-border bg-background shadow-sm">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <h4 className="text-sm font-semibold">New project details</h4>
+            <button
+              onClick={handleResetCreateForm}
+              className="rounded-md px-2 py-1 text-xs hover:bg-muted"
+            >
+              Close
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Input
+              value={newProjectName}
+              onChange={(event) => setNewProjectName(event.target.value)}
+              placeholder="Project name"
+            />
+            <Input
+              value={newProjectDesc}
+              onChange={(event) => setNewProjectDesc(event.target.value)}
+              placeholder="Project description"
+            />
+          </div>
+          <button
+            onClick={handleCreateNewProject}
+            disabled={createProjectMutation.isLoading || !newProjectName.trim()}
+            className="mt-3 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
+          >
+            {createProjectMutation.isLoading ? "Creating..." : "Create Project"}
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatCard label="Active" value={activeProjects} trend="neutral" />
         <StatCard label="Completed" value={completedProjects} />
         <StatCard label="Efficiency" value={efficiency} trend={Number(efficiency.replace("%", "")) >= 75 ? "up" : "neutral"} />
+      </div>
+
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <p className="text-xs text-muted-foreground">
+          Showing {visibleProjects.length} of {projectList.length} projects.
+        </p>
+        <Input
+          value={searchTerm}
+          onChange={(event) => setSearchTerm(event.target.value)}
+          placeholder="Search projects..."
+          className="max-w-sm"
+        />
       </div>
 
       <div className="flex flex-wrap gap-3 items-center">
@@ -164,7 +233,17 @@ export default function ProjectsPage() {
           </div>
         )}
 
-        {projectList.map((project) => (
+        {!isLoading && projectList.length > 0 && visibleProjects.length === 0 && (
+          <div className="md:col-span-2 lg:col-span-3 gh-box p-12 flex flex-col items-center justify-center text-center space-y-4">
+            <PhosphorIcons.MagnifyingGlass size={28} weight="duotone" className="text-muted-foreground" />
+            <h3 className="text-[16px] font-semibold">No projects match your search</h3>
+            <p className="text-[14px] text-muted-foreground max-w-xs">
+              Try another keyword or clear the search bar.
+            </p>
+          </div>
+        )}
+
+        {visibleProjects.map((project) => (
           <PARACard
             key={project.id}
             id={project.id}
