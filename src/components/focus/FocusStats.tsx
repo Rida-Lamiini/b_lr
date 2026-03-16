@@ -20,14 +20,12 @@ export function FocusStats() {
           label="Today's Focus"
           value={statsLoading ? "..." : (hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`)}
           sub={`${dailyStats?.sessionCount || 0} completed sessions`}
-          icon={<Icons.Brain size={16} weight="duotone" />}
         />
         <StatCard
           label="Daily Goal"
           value={statsLoading ? "..." : `${Math.round(Math.min((totalMinutes / 120) * 100, 100))}%`} /* Assuming 2 hr goal for demo */
           sub="of 2 hours target"
           trend={totalMinutes >= 120 ? "up" : "neutral"}
-          icon={<Icons.Target size={16} weight="duotone" />}
         />
       </div>
 

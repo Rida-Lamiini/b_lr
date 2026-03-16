@@ -1,0 +1,11 @@
+# This is a generic default config. 
+# If you run this locally, Caddy will serve HTTP on port 80.
+# If you replace ":80" with your public domain name "app.yourdomain.com", Caddy will automatically fetch Let's Encrypt SSL certificates.
+
+:80 {
+    # Proxy all traffic to the Next.js standalone container
+    reverse_proxy app:3000
+    
+    # Optional: Enable compression for faster loads
+    encode gzip zstd
+}
