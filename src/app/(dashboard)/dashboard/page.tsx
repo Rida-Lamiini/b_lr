@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { StatCard } from "@/components/ui/stat-card"
 import { SectionHeader } from "@/components/ui/section-header"
+import { DashboardStats } from "@/components/dashboard/DashboardStats"
 import * as Icons from "@phosphor-icons/react/dist/ssr"
 
 export default async function DashboardPage() {
@@ -11,16 +12,23 @@ export default async function DashboardPage() {
     redirect("/login")
   }
 
+  const firstName = session.user?.name?.split(" ")[0] ?? "Operative"
+
   return (
-    <div className="space-y-10 max-w-6xl mx-auto">
+    <div className="space-y-10 max-w-6xl mx-auto pb-20">
+      {/* Welcome Header */}
+      <div className="space-y-1">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          Welcome back, <span className="text-primary italic">{firstName}</span>.
+        </h1>
+        <p className="text-muted-foreground text-[14px] font-mono uppercase tracking-widest opacity-70">
+          Neural Core Status: <span className="text-green-500 font-bold">OPTIMAL</span> // {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
+      </div>
+
       <div className="space-y-4">
-        <SectionHeader label="System Overview" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard label="Projects" value="0" />
-          <StatCard label="Areas" value="0" />
-          <StatCard label="Resources" value="0" />
-          <StatCard label="Archive" value="0" />
-        </div>
+        <SectionHeader label="System Metrics" />
+        <DashboardStats />
       </div>
 
       <div className="space-y-4">
@@ -36,7 +44,7 @@ export default async function DashboardPage() {
                 Record daily reflections and synaptic connections in your neural journal.
               </p>
             </div>
-            <button className="mt-auto px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
+            <button className="mt-auto w-full px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
               Execute Procedure
             </button>
           </div>
@@ -51,7 +59,7 @@ export default async function DashboardPage() {
                 Schedule focused temporal blocks for deep work and atomic progress.
               </p>
             </div>
-            <button className="mt-auto px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
+            <button className="mt-auto w-full px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
               Allocate Block
             </button>
           </div>
@@ -66,7 +74,7 @@ export default async function DashboardPage() {
                 Initiate high-cogency session with neuro-optimization and science tips.
               </p>
             </div>
-            <button className="mt-auto px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
+            <button className="mt-auto w-full px-4 py-1.5 bg-secondary hover:bg-[#30363d] text-foreground border border-border rounded-md text-[12px] font-semibold transition-colors">
               Initialize Core
             </button>
           </div>

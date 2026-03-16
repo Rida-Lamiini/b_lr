@@ -100,7 +100,8 @@ export const habitRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
+      const userId = ctx.session.user?.id;
+      if (!userId) throw new Error("Unauthorized");
       const { id, ...data } = input;
 
       if (id) {
@@ -113,7 +114,7 @@ export const habitRouter = router({
       return ctx.prisma.habit.create({
         data: {
           ...data,
-          userId,
+          user: { connect: { id: userId } },
         },
       });
     }),
@@ -127,7 +128,9 @@ export const habitRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
+      const userId = ctx.session.user?.id;
+      if (!userId) throw new Error("Unauthorized");
+      
       const { habitId, date, completed } = input;
       const d = startOfDay(date);
 
@@ -140,8 +143,8 @@ export const habitRouter = router({
           },
         },
         create: {
-          userId,
-          habitId,
+          user: { connect: { id: userId } },
+          habit: { connect: { id: habitId } },
           date: d,
           completed,
         },

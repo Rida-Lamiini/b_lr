@@ -3,11 +3,12 @@ import { create } from "zustand";
 export interface Command {
   id: string;
   label: string;
-  /** lucide-react icon name as string e.g. "CheckSquare" */
+  /** lucide-react icon name as string e.g. "CheckSquare" or custom icon */
   icon: string;
-  group: "navigate" | "create" | "actions" | "recent";
+  group: "navigate" | "create" | "actions" | "recent" | "search";
   shortcut?: string[];
   action: () => void;
+  data?: any;
 }
 
 interface CommandPaletteStore {
