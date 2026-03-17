@@ -25,13 +25,22 @@
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
   
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+  
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
   
-  --radius-lg: 6px;
-  --radius-md: 4px;
-  --radius-sm: 2px;
+  --radius-lg: 8px;
+  --radius-md: 6px;
+  --radius-sm: 4px;
 
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   --font-mono: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
@@ -41,36 +50,45 @@
   *, *::before, *::after { box-sizing: border-box; border-color: var(--color-border); }
 
   :root {
-    /* GitHub Gray-Dark Palette */
-    --background: 216 28% 7%;
-    --foreground: 210 17% 82%;
+    /* Modern Dark Palette - Refined & Professional */
+    --background: 215 28% 6%;
+    --foreground: 210 20% 86%;
     
-    --card: 215 21% 11%;
-    --card-foreground: 210 17% 82%;
+    --card: 216 22% 10%;
+    --card-foreground: 210 20% 86%;
     
-    --popover: 216 28% 7%;
-    --popover-foreground: 210 17% 82%;
+    --popover: 215 28% 6%;
+    --popover-foreground: 210 20% 86%;
     
-    --primary: 212 100% 67%;
-    --primary-foreground: 216 28% 7%;
+    --primary: 210 90% 62%;
+    --primary-foreground: 215 28% 6%;
     
-    --secondary: 214 15% 15%;
-    --secondary-foreground: 210 17% 98%;
+    --secondary: 214 18% 16%;
+    --secondary-foreground: 210 25% 92%;
     
-    --muted: 212 12% 21%;
-    --muted-foreground: 212 9% 58%;
+    --muted: 212 15% 22%;
+    --muted-foreground: 212 12% 52%;
     
-    --accent: 212 100% 67%;
-    --accent-foreground: 216 28% 7%;
+    --accent: 210 90% 62%;
+    --accent-foreground: 215 28% 6%;
     
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 212 12% 21%;
-    --input: 212 12% 21%;
-    --ring: 212 100% 67%;
+    --success: 120 73% 45%;
+    --success-foreground: 210 40% 98%;
     
-    --radius: 6px;
+    --warning: 38 92% 50%;
+    --warning-foreground: 215 28% 6%;
+    
+    --info: 200 85% 52%;
+    --info-foreground: 210 40% 98%;
+    
+    --border: 212 15% 18%;
+    --input: 212 15% 18%;
+    --ring: 210 90% 62%;
+    
+    --radius: 8px;
   }
 
   html {
@@ -82,45 +100,181 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
   }
 
-  /* GitHub Style Scrollbars */
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  /* Improved Scrollbars */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { 
     background: var(--color-muted); 
-    border-radius: 10px;
+    border-radius: 6px;
     border: 2px solid var(--color-background);
   }
-  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-muted-foreground); }
+  
+  /* Text Selection */
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
 }
 
 @layer components {
-  /* GitHub-esque Content Surface */
+  /* Card Surfaces */
   .gh-box {
     background: var(--color-card);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease-out;
+  }
+
+  .gh-box:hover {
+    border-color: var(--color-border);
+    box-shadow: 0 4px 12px rgba(210, 168, 255, 0.08);
   }
 
   .interactive-card {
     background: var(--color-card);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    transition: background 0.2s ease;
+    border-radius: var(--radius-md);
+    transition: all 0.25s ease-out;
+    cursor: pointer;
   }
+  
   .interactive-card:hover {
     background: var(--color-secondary);
+    border-color: var(--color-muted);
+    box-shadow: 0 6px 16px rgba(210, 168, 255, 0.12);
+    transform: translateY(-1px);
   }
 
-  /* Dev-specific aesthetics */
+  .interactive-card:active {
+    transform: translateY(0);
+  }
+
+  /* Input Enhancements */
+  input::placeholder {
+    color: var(--color-muted-foreground);
+    opacity: 0.6;
+  }
+
+  /* Code Tag */
   .code-tag {
     font-family: var(--font-mono);
     font-size: 11px;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 3px 7px;
+    border-radius: var(--radius-sm);
     background: var(--color-secondary);
     color: var(--color-muted-foreground);
     border: 1px solid var(--color-border);
+    font-weight: 500;
+  }
+
+  /* Custom Scrollbar Class */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-muted) transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-muted);
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-muted-foreground);
+  }
+
+  /* Focus Ring Utility */
+  .focus-ring {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+  
+  .focus-ring:focus {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* Smooth Transitions */
+  .smooth-transition {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hover Lift Effect */
+  .hover-lift {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Glow Effect */
+  .glow-primary {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .glow-primary:hover,
+  .glow-primary:focus-visible {
+    box-shadow: 0 0 16px rgba(210, 168, 255, 0.3);
+  }
+
+  /* Smooth Underline Animation */
+  .underline-animated {
+    position: relative;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .underline-animated::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+  }
+
+  .underline-animated:hover::after {
+    width: 100%;
+  }
+
+  /* Keyboard Hints */
+  kbd {
+    font-family: var(--font-mono);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 20px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 500;
+    background: var(--color-muted);
+    color: var(--color-muted-foreground);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  kbd:hover {
+    background: var(--color-muted-foreground);
+    color: var(--color-background);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
 }

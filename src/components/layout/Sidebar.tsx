@@ -13,19 +13,16 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <aside className={cn(
-      "fixed inset-y-0 left-0 z-50 flex flex-col w-64 min-w-[256px] h-screen bg-background/60 backdrop-blur-xl border-r border-border/40 overflow-hidden transition-transform duration-300 lg:relative lg:translate-x-0 group/sidebar",
+      "fixed inset-y-0 left-0 z-50 flex flex-col w-64 min-w-[256px] h-screen bg-background/95 backdrop-blur-sm border-r border-border overflow-hidden transition-transform duration-300 lg:relative lg:translate-x-0 group/sidebar",
       !isOpen && "-translate-x-full"
     )}>
-      {/* Decorative gradient glow */}
-      <div className="absolute -top-24 -left-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full pointer-events-none opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-1000" />
-      
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-6 h-14 border-b border-border/40 flex-shrink-0 relative z-10">
-        <div className="w-6 h-6 bg-primary rounded-lg flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
-          <Icons.Cube size={14} weight="bold" />
+      {/* Logo Section */}
+      <div className="flex items-center gap-3 px-5 h-14 border-b border-border/60 flex-shrink-0 relative z-10">
+        <div className="w-7 h-7 bg-primary rounded-md flex items-center justify-center text-primary-foreground shadow-md hover:shadow-lg transition-shadow">
+          <Icons.Cube size={16} weight="bold" />
         </div>
-        <span className="text-sm font-bold tracking-tight text-foreground font-mono">
-          BRAIN <span className="text-primary font-light opacity-50">/</span> LOCUS
+        <span className="text-xs font-bold tracking-wide text-foreground font-mono">
+          BRAIN<span className="text-primary/70 mx-1">/</span>LOCUS
         </span>
       </div>
 
@@ -57,20 +54,20 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       </nav>
 
       {/* User Footer */}
-      <div className="flex items-center gap-3 px-5 h-16 border-t border-border/40 flex-shrink-0 hover:bg-primary/5 cursor-pointer transition-all duration-300 relative z-10 group/user">
-        <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] font-bold text-primary shadow-inner">
+      <div className="flex items-center gap-3 px-5 h-16 border-t border-border/60 flex-shrink-0 hover:bg-muted/50 cursor-pointer transition-all duration-200 relative z-10 group/user">
+        <div className="w-8 h-8 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center text-[11px] font-bold text-primary shadow-sm group-hover/user:shadow-md transition-shadow">
           R
         </div>
         <div className="flex flex-col flex-1 overflow-hidden">
-          <span className="text-xs text-foreground truncate font-bold uppercase tracking-wider font-mono">
+          <span className="text-xs text-foreground truncate font-semibold uppercase tracking-wide">
             rida
           </span>
-          <span className="text-[9px] text-muted-foreground flex items-center gap-1.5 uppercase font-medium tracking-tight">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
-            Core System Active
+          <span className="text-[8px] text-muted-foreground flex items-center gap-1 uppercase font-medium tracking-wide">
+            <span className="w-1.5 h-1.5 rounded-full bg-success/80 shadow-sm animate-pulse" />
+            Active
           </span>
         </div>
-        <Icons.DotsThreeVertical className="text-muted-foreground group-hover/user:text-foreground transition-colors" />
+        <Icons.DotsThreeVertical size={16} className="text-muted-foreground group-hover/user:text-foreground transition-colors flex-shrink-0" />
       </div>
     </aside>
   );
