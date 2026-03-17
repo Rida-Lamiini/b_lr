@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -19,9 +19,36 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#0ea5e9",
+};
+
 export const metadata: Metadata = {
-  title: "brain / Locus",
-  description: "Advanced cognitive organizational system for high-level management.",
+  title: {
+    default: "Brain / Locus | Personal Operating System",
+    template: "%s | Brain / Locus",
+  },
+  description: "Your personal operating system for cognitive productivity. Manage projects, tasks, knowledge, and deep work in one unified system.",
+  keywords: ["productivity", "cognitive", "task management", "knowledge management", "focus", "organization"],
+  authors: [{ name: "Brain / Locus" }],
+  creator: "Brain / Locus",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://brain-locus.vercel.app",
+    title: "Brain / Locus | Personal Operating System",
+    description: "Your personal operating system for cognitive productivity.",
+    siteName: "Brain / Locus",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Brain / Locus",
+    description: "Your personal operating system for cognitive productivity.",
+  },
 };
 
 export default function RootLayout({

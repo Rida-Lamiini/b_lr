@@ -5,6 +5,7 @@ import { CommandTrigger } from "@/components/command-palette/CommandTrigger";
 import { Kbd } from "@/components/ui/kbd-hint";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import * as Icons from "@phosphor-icons/react";
 
 /**
  * Derives a human-readable breadcrumb from the current pathname.
@@ -48,26 +49,26 @@ export function Header({ onMenuClick }: HeaderProps) {
 
   return (
     <header className={cn(
-      "flex items-center gap-3 px-5 h-12 flex-shrink-0",
-      "bg-card border-b border-border"
+      "flex items-center gap-4 px-5 h-12 flex-shrink-0",
+      "bg-card/60 backdrop-blur-sm border-b border-border/60"
     )}>
 
       {/* Mobile menu button */}
       <button
         onClick={onMenuClick}
-        className="lg:hidden text-muted-foreground hover:text-foreground text-lg"
+        className="lg:hidden p-1 text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-md transition-colors"
         title="Toggle menu"
       >
-        ☰
+        <Icons.List size={18} weight="bold" />
       </button>
 
       {/* Breadcrumb */}
-      <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
-        <span className="text-muted-foreground">brain</span>
+      <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground font-medium">
+        <span className="text-muted-foreground/70">brain</span>
         {breadcrumb.map((segment, i) => (
           <span key={i} className="flex items-center gap-1.5">
-            <span className="text-muted-foreground">/</span>
-            <span className={i === breadcrumb.length - 1 ? "text-foreground font-semibold" : "text-muted-foreground"}>
+            <span className="text-muted-foreground/50">/</span>
+            <span className={i === breadcrumb.length - 1 ? "text-foreground font-semibold capitalize" : "text-muted-foreground/70 capitalize"}>
               {segment}
             </span>
           </span>
@@ -76,12 +77,12 @@ export function Header({ onMenuClick }: HeaderProps) {
 
       {/* Command trigger — centered */}
       <div className="flex-1 flex justify-center">
-        <CommandTrigger className="w-64" />
+        <CommandTrigger className="w-72" />
       </div>
 
       {/* Right: date */}
       <div className="flex items-center gap-3">
-        <span className="text-[11px] text-muted-foreground hidden sm:block">
+        <span className="text-[11px] text-muted-foreground hidden sm:block font-medium">
           {today}
         </span>
         <Kbd keys={["⌘K"]} />

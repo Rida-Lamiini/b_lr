@@ -4,9 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { StatCard } from "@/components/ui/stat-card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc-client";
 import { PARACard } from "@/components/para/para-card";
 import * as PhosphorIcons from "@phosphor-icons/react";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export default function ProjectsPage() {
   type SortOption = "updatedAt_desc" | "updatedAt_asc" | "name_asc" | "name_desc";
@@ -114,48 +117,88 @@ export default function ProjectsPage() {
       <SectionHeader
         label="Projects"
         action={
-          <button
+          <Button
             onClick={() => setIsCreating((prev) => !prev)}
-            className="flex items-center gap-1.5 bg-[#238636] hover:bg-[#2ea043] text-white px-3 py-1 rounded-md text-[12px] font-semibold transition-colors"
-            aria-label="Create a new project"
+            className="gap-2"
+            size="sm"
           >
-            <PhosphorIcons.Plus size={14} weight="bold" />
+            <PhosphorIcons.Plus size={16} weight="bold" />
             {isCreating ? "Cancel" : "New Project"}
-          </button>
+          </Button>
         }
       />
 
       {isCreating && (
-        <div className="gh-box p-4 rounded-md border border-border bg-background shadow-sm">
-          <div className="flex items-center justify-between gap-2 mb-3">
-            <h4 className="text-sm font-semibold">New project details</h4>
-            <button
-              onClick={handleResetCreateForm}
-              className="rounded-md px-2 py-1 text-xs hover:bg-muted"
-            >
-              Close
-            </button>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className="relative overflow-hidden rounded-md bg-card border border-primary/20 p-6 shadow-lg"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+          
+          <div className="relative z-10">
+            <div className="flex items-center justify-between gap-4 mb-5">
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-1">Create new project</h3>
+                <p className="text-sm text-muted-foreground">Start something new and organize your work</p>
+              </div>
+              <button
+                onClick={handleResetCreateForm}
+                className="p-1.5 rounded-md text-muted-foreground hover:bg-muted/50 transition-colors"
+              >
+                <PhosphorIcons.X size={20} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Project Name</label>
+                <Input
+                  value={newProjectName}
+                  onChange={(event) => setNewProjectName(event.target.value)}
+                  placeholder="e.g., Website Redesign"
+                  autoFocus
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Description</label>
+                <Input
+                  value={newProjectDesc}
+                  onChange={(event) => setNewProjectDesc(event.target.value)}
+                  placeholder="Brief description..."
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <Button
+                onClick={handleCreateNewProject}
+                disabled={createProjectMutation.isLoading || !newProjectName.trim()}
+                className="gap-2"
+              >
+                {createProjectMutation.isLoading ? (
+                  <>
+                    <PhosphorIcons.Spinner size={16} className="animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <PhosphorIcons.CheckCircle size={16} />
+                    Create Project
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleResetCreateForm}
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <Input
-              value={newProjectName}
-              onChange={(event) => setNewProjectName(event.target.value)}
-              placeholder="Project name"
-            />
-            <Input
-              value={newProjectDesc}
-              onChange={(event) => setNewProjectDesc(event.target.value)}
-              placeholder="Project description"
-            />
-          </div>
-          <button
-            onClick={handleCreateNewProject}
-            disabled={createProjectMutation.isLoading || !newProjectName.trim()}
-            className="mt-3 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary/90 disabled:opacity-50"
-          >
-            {createProjectMutation.isLoading ? "Creating..." : "Create Project"}
-          </button>
-        </div>
+        </motion.div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -164,111 +207,172 @@ export default function ProjectsPage() {
         <StatCard label="Efficiency" value={efficiency} trend={Number(efficiency.replace("%", "")) >= 75 ? "up" : "neutral"} />
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <p className="text-xs text-muted-foreground">
-          Showing {visibleProjects.length} of {projectList.length} projects.
-        </p>
-        <Input
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search projects..."
-          className="max-w-sm"
-        />
-      </div>
+      {/* Search and controls */}
+      <div className="space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <div className="flex-1 relative group">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
+              <PhosphorIcons.MagnifyingGlass size={18} />
+            </div>
+            <Input
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Search projects by name or description..."
+              className="pl-10"
+            />
+          </div>
+          <p className="text-xs text-muted-foreground whitespace-nowrap">
+            {visibleProjects.length} of {projectList.length}
+          </p>
+        </div>
 
-      <div className="flex flex-wrap gap-3 items-center">
-        <label className="text-sm font-medium">
-          Filter:
-          <select
-            value={filter}
-            onChange={(event) => setFilter(event.target.value as FilterOption)}
-            className="ml-2 rounded-md border border-border px-2 py-1"
-          >
-            <option value="all">All</option>
-            <option value="withTasks">With tasks</option>
-            <option value="noTasks">No tasks</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-          </select>
-        </label>
+        {/* Filter and sort controls */}
+        <div className="flex flex-wrap gap-3">
+          <div className="flex items-center gap-2 bg-card/50 border border-border/60 rounded-md px-3 py-2">
+            <PhosphorIcons.FunnelSimple size={16} className="text-muted-foreground" />
+            <select
+              value={filter}
+              onChange={(event) => setFilter(event.target.value as FilterOption)}
+              className="bg-transparent text-xs font-medium text-foreground cursor-pointer outline-none"
+            >
+              <option value="all">All projects</option>
+              <option value="withTasks">With tasks</option>
+              <option value="noTasks">No tasks</option>
+              <option value="active">Active only</option>
+              <option value="completed">Completed only</option>
+            </select>
+          </div>
 
-        <label className="text-sm font-medium">
-          Sort:
-          <select
-            value={sortBy}
-            onChange={(event) => setSortBy(event.target.value as SortOption)}
-            className="ml-2 rounded-md border border-border px-2 py-1"
-          >
-            <option value="updatedAt_desc">Updated (newest)</option>
-            <option value="updatedAt_asc">Updated (oldest)</option>
-            <option value="name_asc">Name (A-Z)</option>
-            <option value="name_desc">Name (Z-A)</option>
-          </select>
-        </label>
+          <div className="flex items-center gap-2 bg-card/50 border border-border/60 rounded-md px-3 py-2">
+            <PhosphorIcons.SortAscending size={16} className="text-muted-foreground" />
+            <select
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value as SortOption)}
+              className="bg-transparent text-xs font-medium text-foreground cursor-pointer outline-none"
+            >
+              <option value="updatedAt_desc">Recently updated</option>
+              <option value="updatedAt_asc">Oldest updated</option>
+              <option value="name_asc">Name (A-Z)</option>
+              <option value="name_desc">Name (Z-A)</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       {isError && (
-        <div className="gh-box p-4 rounded-md border border-red-200 bg-red-50 text-red-700">
-          Error loading projects: {error?.message || "Unknown error"}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-start gap-4 p-4 rounded-md bg-destructive/10 border border-destructive/20"
+        >
+          <PhosphorIcons.WarningCircle size={20} className="text-destructive flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="font-semibold text-destructive mb-1">Error loading projects</h3>
+            <p className="text-sm text-destructive/80">{error?.message || "Unknown error"}</p>
+          </div>
+        </motion.div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {(isLoading || (isFetching && page === 0)) &&
           Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="gh-box p-4 h-32 animate-pulse bg-muted/20" />
+            <motion.div
+              key={i}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: i * 0.05 }}
+              className="h-40 rounded-md bg-card border border-border/60 animate-pulse"
+            />
           ))}
 
         {!isLoading && !projectList.length && !isError && (
-          <div className="md:col-span-2 lg:col-span-3 gh-box p-12 flex flex-col items-center justify-center text-center space-y-4">
-            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center text-muted-foreground">
-              <PhosphorIcons.Kanban size={24} weight="duotone" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="md:col-span-2 lg:col-span-3 rounded-md bg-card/50 border border-border/40 p-12 flex flex-col items-center justify-center text-center space-y-4"
+          >
+            <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center">
+              <PhosphorIcons.Kanban size={32} weight="duotone" className="text-primary" />
             </div>
-            <div className="space-y-1">
-              <h3 className="text-[16px] font-semibold">No active projects</h3>
-              <p className="text-[14px] text-muted-foreground max-w-xs">
-                Time to start something new? Create a project to organize your focused efforts.
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold text-foreground">No projects yet</h3>
+              <p className="text-sm text-muted-foreground max-w-sm">
+                Create your first project to start organizing your work and tracking progress.
               </p>
             </div>
-          </div>
+            <Button 
+              onClick={() => setIsCreating(true)}
+              className="gap-2 mt-2"
+            >
+              <PhosphorIcons.Plus size={16} />
+              Create First Project
+            </Button>
+          </motion.div>
         )}
 
         {!isLoading && projectList.length > 0 && visibleProjects.length === 0 && (
-          <div className="md:col-span-2 lg:col-span-3 gh-box p-12 flex flex-col items-center justify-center text-center space-y-4">
-            <PhosphorIcons.MagnifyingGlass size={28} weight="duotone" className="text-muted-foreground" />
-            <h3 className="text-[16px] font-semibold">No projects match your search</h3>
-            <p className="text-[14px] text-muted-foreground max-w-xs">
-              Try another keyword or clear the search bar.
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="md:col-span-2 lg:col-span-3 rounded-md bg-card/50 border border-border/40 p-12 flex flex-col items-center justify-center text-center space-y-4"
+          >
+            <div className="w-16 h-16 rounded-lg bg-muted/20 flex items-center justify-center">
+              <PhosphorIcons.MagnifyingGlass size={32} weight="duotone" className="text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-semibold text-foreground">No matches found</h3>
+            <p className="text-sm text-muted-foreground max-w-sm">
+              Try adjusting your search or filters to find what you're looking for.
             </p>
-          </div>
+          </motion.div>
         )}
 
-        {visibleProjects.map((project) => (
-          <PARACard
+        {visibleProjects.map((project, index) => (
+          <motion.div
             key={project.id}
-            id={project.id}
-            name={project.name}
-            description={project.description}
-            type="PROJECT"
-            updatedAt={project.updatedAt}
-            stats={{
-              tasks: project._count?.tasks ?? 0,
-              notes: project._count?.notes ?? 0,
-            }}
-          />
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
+          >
+            <PARACard
+              id={project.id}
+              name={project.name}
+              description={project.description}
+              type="PROJECT"
+              updatedAt={project.updatedAt}
+              stats={{
+                tasks: project._count?.tasks ?? 0,
+                notes: project._count?.notes ?? 0,
+              }}
+            />
+          </motion.div>
         ))}
       </div>
 
       {pageData && pageData.length === projectPageSize && (
-        <div className="text-center">
-          <button
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex justify-center py-6"
+        >
+          <Button
             onClick={() => setPage((prev) => prev + 1)}
             disabled={isFetching}
-            className="rounded-md border border-border px-4 py-2 text-sm hover:bg-muted"
+            variant="outline"
+            className="gap-2"
           >
-            {isFetching ? "Loading more..." : "Load more"}
-          </button>
-        </div>
+            {isFetching ? (
+              <>
+                <PhosphorIcons.Spinner size={16} className="animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                Load more projects
+                <PhosphorIcons.CaretDown size={16} />
+              </>
+            )}
+          </Button>
+        </motion.div>
       )}
     </div>
   );

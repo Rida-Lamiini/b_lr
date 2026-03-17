@@ -18,14 +18,14 @@ export function ActivityHeatmap() {
 
   if (isLoading) {
     return (
-      <div className="gh-box p-5 animate-pulse">
-        <div className="h-[140px] bg-white/5 rounded" />
+      <div className="rounded-md bg-card border border-border p-5 animate-pulse">
+        <div className="h-32 bg-muted/30 rounded-md" />
       </div>
     );
   }
 
   return (
-    <div className="gh-box p-5 overflow-x-auto">
+    <div className="rounded-md bg-card border border-border p-5 overflow-x-auto hover:border-border/80 transition-colors duration-200">
       <Heatmap
         data={heatmapData}
         startDate={sixMonthsAgo}

@@ -15,16 +15,17 @@ export function CommandTrigger({ className }: { className?: string }) {
     <button
       onClick={() => setOpen(true)}
       className={cn(
-        "flex items-center gap-2 px-3 py-1.5",
-        "bg-bg-2 border border-border-default rounded-md",
-        "font-mono text-xs text-text-3",
-        "hover:border-border-emphasis hover:text-text-2",
-        "transition-colors duration-fast",
+        "flex items-center gap-2 px-3 py-2",
+        "bg-card/50 border border-border rounded-md",
+        "text-xs text-muted-foreground",
+        "hover:bg-card hover:border-muted hover:text-foreground",
+        "transition-all duration-200",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
         className
       )}
     >
-      <span className="text-text-3">⌕</span>
-      <span>Search or run command...</span>
+      <span className="flex-shrink-0 text-xs">⌕</span>
+      <span className="text-muted-foreground text-xs truncate flex-1">Search or run command...</span>
       <Kbd keys={["⌘K"]} />
     </button>
   );

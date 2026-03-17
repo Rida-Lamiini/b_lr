@@ -14,14 +14,14 @@ export function WorkloadPartition() {
 
   if (isLoading) {
     return (
-      <div className="gh-box p-5 animate-pulse">
-        <div className="h-[180px] bg-white/5 rounded" />
+      <div className="rounded-md bg-card border border-border p-5 animate-pulse">
+        <div className="h-44 bg-muted/30 rounded-md" />
       </div>
     );
   }
 
   return (
-    <div className="gh-box p-5">
+    <div className="rounded-md bg-card border border-border p-5 hover:border-border/80 transition-colors duration-200">
       <Partition data={partitionData} height={180} />
     </div>
   );

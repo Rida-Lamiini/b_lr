@@ -9,17 +9,17 @@ export function DashboardStats() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="gh-box p-4 h-24 animate-pulse bg-white/5" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="h-28 rounded-md bg-card border border-border animate-pulse" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard 
           label="Projects" 
           value={stats?.para.projects ?? 0} 
@@ -43,7 +43,7 @@ export function DashboardStats() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard 
           label="Resources" 
           value={stats?.para.resources ?? 0} 
@@ -55,7 +55,7 @@ export function DashboardStats() {
           sub="Historical data nodes"
         />
         <StatCard 
-          label="Glossary Nodes" 
+          label="Notes" 
           value={stats?.notes.total ?? 0} 
           sub="Total research notes"
         />
