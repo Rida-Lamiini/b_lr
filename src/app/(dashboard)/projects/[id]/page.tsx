@@ -9,6 +9,11 @@ import * as PhosphorIcons from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ProjectHealth } from "@/components/projects/ProjectHealth";
+import { ProjectInsights } from "@/components/projects/ProjectInsights";
+import { ProjectTimeline } from "@/components/projects/ProjectTimeline";
+import { CollaborationHub } from "@/components/projects/CollaborationHub";
+import { AdvancedViews } from "@/components/projects/AdvancedViews";
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -231,6 +236,22 @@ export default function ProjectDetailPage() {
         </motion.div>
       )}
 
+      {/* Project Health & Insights Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ProjectHealth
+          totalTasks={totalTasks}
+          completedTasks={completedTasks}
+          overdueTasks={0}
+          lastActivityDate={project.updatedAt}
+        />
+        <ProjectInsights
+          totalTasks={totalTasks}
+          completedTasks={completedTasks}
+          notes={notes || []}
+          createdAt={project.createdAt}
+        />
+      </div>
+
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {projectStats.map((stat, index) => {
@@ -259,6 +280,19 @@ export default function ProjectDetailPage() {
           );
         })}
       </div>
+
+      {/* Timeline Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+      >
+        <ProjectTimeline
+          tasks={tasks || []}
+          notes={notes || []}
+          createdAt={project.createdAt}
+        />
+      </motion.div>
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -327,7 +361,7 @@ export default function ProjectDetailPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
-          className="space-y-6"
+          className="space-y-6 lg:order-2"
         >
           {/* Notes Section */}
           <div className="rounded-lg bg-card border border-border/60 p-6">
@@ -375,6 +409,21 @@ export default function ProjectDetailPage() {
             </div>
           </div>
         </motion.div>
+      </div>
+
+      {/* Bottom Grid: Collaboration & Advanced Views */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <CollaborationHub
+          projectName={project.name}
+          projectId={projectId}
+          taskCount={totalTasks}
+          noteCount={notes?.length || 0}
+        />
+        <AdvancedViews
+          projectId={projectId}
+          totalTasks={totalTasks}
+          completedTasks={completedTasks}
+        />
       </div>
     </motion.div>
   );
